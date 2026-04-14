@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Evaluación Scholars PDC 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+:root{--bg:#F5F3EE;--surface:#FFFFFF;--surface2:#EDEBE6;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);--text:#1A1916;--text2:#6B6860;--text3:#9E9C97;--green:#1A6B4A;--green-bg:#E6F2EC;--amber:#8A5A0A;--amber-bg:#FDF0D5;--red:#8A2020;--red-bg:#FAEBEB;--purple:#4A3A8A;--purple-bg:#EEEAFC;--radius:10px;--radius-sm:6px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
+.app-header{background:var(--text);color:#F5F3EE;padding:1.25rem 1.25rem 1rem;position:sticky;top:0;z-index:50}
+.app-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.app-title{font-size:16px;font-weight:600;letter-spacing:-0.3px}
+.app-sub{font-size:12px;color:rgba(245,243,238,0.55);margin-top:2px}
+.mode-tag{font-family:'DM Mono',monospace;font-size:10px;background:rgba(245,243,238,0.15);color:rgba(245,243,238,0.7);padding:3px 8px;border-radius:4px;white-space:nowrap}
+.tab-bar{display:flex;gap:4px}
+.tab-btn{flex:1;padding:7px 4px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:400;background:rgba(245,243,238,0.1);color:rgba(245,243,238,0.55);border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.tab-btn.active{background:rgba(245,243,238,0.95);color:var(--text);font-weight:600}
+.screen{display:none;padding:1rem 1rem 5rem}
+.screen.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:10px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.card-sub{font-size:12px;color:var(--text3);margin-bottom:12px}
+.section-heading{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin:1.25rem 0 8px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:500}
+input[type="text"],textarea,select{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 11px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;-webkit-appearance:none;transition:border-color 0.15s}
+input[type="text"]:focus,textarea:focus,select:focus{border-color:var(--text)}
+textarea{min-height:70px;resize:vertical;line-height:1.5}
+.score-row{display:flex;gap:5px;margin-bottom:8px}
+.score-btn{flex:1;padding:9px 4px;font-size:15px;font-family:'DM Mono',monospace;font-weight:500;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;color:var(--text2);transition:all 0.12s}
+.score-btn.s1{background:#FAEBEB;border-color:#D08080;color:#8A2020}
+.score-btn.s2{background:#FDF0D5;border-color:#D4A050;color:#7A4E0A}
+.score-btn.s3{background:#F5F3EE;border-color:#B0ADA5;color:#5A5750}
+.score-btn.s4{background:#E6F2EC;border-color:#70B090;color:#1A6B4A}
+.score-btn.s5{background:#EEEAFC;border-color:#9A8ADA;color:#3A2A7A}
+.score-labels{display:flex;justify-content:space-between;margin-bottom:10px}
+.score-label{font-size:10px;color:var(--text3);flex:1;text-align:center}
+.signals-toggle{font-size:12px;color:var(--text2);background:none;border:none;cursor:pointer;padding:0;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.signals-box{display:none;background:var(--bg);border-radius:var(--radius-sm);padding:10px;margin-bottom:10px;border:1px solid var(--border)}
+.signals-box.open{display:block}
+.signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sig-title{font-size:11px;font-weight:600;margin-bottom:5px}
+.sig-title.g{color:var(--green)}
+.sig-title.r{color:var(--red)}
+.sig-item{font-size:11px;color:var(--text2);padding-left:10px;position:relative;margin-bottom:3px;line-height:1.4}
+.sig-item::before{content:"·";position:absolute;left:2px}
+.verdict-row{display:flex;gap:6px;margin-top:8px}
+.v-btn{flex:1;padding:9px 6px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;text-align:center;color:var(--text2);transition:all 0.12s}
+.v-btn.sel-adv{background:var(--green-bg);border-color:#70B090;color:var(--green)}
+.v-btn.sel-obs{background:var(--purple-bg);border-color:#9A8ADA;color:var(--purple)}
+.v-btn.sel-des{background:var(--red-bg);border-color:#D08080;color:var(--red)}
+.v-btn.sel-claro{background:var(--green-bg);border-color:#70B090;color:var(--green)}
+.v-btn.sel-duda{background:var(--amber-bg);border-color:#D4A050;color:var(--amber)}
+.v-btn.sel-fallo{background:var(--red-bg);border-color:#D08080;color:var(--red)}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:0.2px}
+.badge-act1{background:#E6F2EC;color:#1A6B4A}
+.badge-act2{background:#EEEAFC;color:#4A3A8A}
+.giro-box{background:var(--amber-bg);border:1px solid #D4A050;border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--amber)}
+.giro-title{font-weight:600;margin-bottom:2px}
+.summary-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:10px}
+.score-row-summary{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
+.score-row-summary:last-child{border-bottom:none}
+.score-name{color:var(--text2)}
+.score-num{font-family:'DM Mono',monospace;font-weight:500}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;margin-top:4px;border-top:1px solid var(--border2)}
+.total-label{font-size:13px;color:var(--text2)}
+.total-num{font-size:28px;font-family:'DM Mono',monospace;font-weight:500}
+.action-btn{width:100%;padding:13px;background:var(--text);color:#F5F3EE;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);cursor:pointer;margin-top:8px;letter-spacing:-0.2px;transition:opacity 0.15s}
+.action-btn:active{opacity:0.8}
+.action-btn.secondary{background:var(--surface);color:var(--text);border:1px solid var(--border2);margin-top:6px}
+.wl-import{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:10px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.stat-tile-label{font-size:11px;color:var(--text3);margin-bottom:2px}
+.stat-tile-val{font-size:24px;font-family:'DM Mono',monospace;font-weight:500}
+.cand-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s}
+.cand-card:active{border-color:var(--border2)}
+.cand-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+.cand-name{font-weight:600;font-size:14px}
+.cand-meta{font-size:12px;color:var(--text3);margin-bottom:6px}
+.cand-badges{display:flex;gap:5px;flex-wrap:wrap}
+.conflict-badge{background:var(--amber-bg);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.score-big{font-family:'DM Mono',monospace;font-size:20px;font-weight:500}
+.score-big.high{color:var(--green)}
+.score-big.mid{color:var(--amber)}
+.score-big.low{color:var(--red)}
+.score-big.none{color:var(--text3)}
+.filter-row{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
+.filter-row::-webkit-scrollbar{display:none}
+.f-btn{white-space:nowrap;font-size:12px;font-family:'DM Sans',sans-serif;padding:6px 12px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;cursor:pointer;color:var(--text2);transition:all 0.12s}
+.f-btn.active{background:var(--text);color:#F5F3EE;border-color:var(--text)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,25,22,0.6);z-index:200}
+.modal-overlay.open{display:block}
+.modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;max-height:85vh;overflow-y:auto;padding:1.25rem;position:fixed;bottom:0;left:0;right:0}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 14px}
+.modal-title{font-size:16px;font-weight:600;margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--text3);margin-bottom:14px}
+.modal-label{font-size:12px;color:var(--text2);font-weight:500;margin-bottom:6px}
+.eval-block{background:var(--bg);border-radius:var(--radius-sm);padding:10px;margin-bottom:8px;border:1px solid var(--border)}
+.eval-block-header{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:6px}
+.eval-detail{font-size:12px;color:var(--text2);margin-bottom:4px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#F5F3EE;font-size:13px;font-weight:500;padding:9px 18px;border-radius:20px;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3)}
+.empty-state p{font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-header-top">
+    <div>
+      <div class="app-title">Scholars PDC 2026</div>
+      <div class="app-sub">Hoja de evaluación · Evaluadores</div>
+    </div>
+    <span class="mode-tag" id="mode-tag">EVALUACIÓN</span>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="goTab('intro')">Inicio</button>
+    <button class="tab-btn" onclick="goTab('eval')">Liderazgo</button>
+    <button class="tab-btn" onclick="goTab('caso')">Caso Perú</button>
+    <button class="tab-btn" onclick="goTab('resumen')">Resumen</button>
+    <button class="tab-btn" onclick="goTab('wl')">W. Lunch</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- SCREEN 0: INSTRUCCIONES -->
+<div class="screen active" id="screen-intro">
+  <div style="margin-top:0.75rem">
+
+    <div style="background:var(--text);border-radius:var(--radius);padding:1.25rem;margin-bottom:12px">
+      <div style="font-size:18px;font-weight:600;color:#F5F3EE;margin-bottom:4px">Workshop Scholars PDC 2026</div>
+      <div style="font-size:13px;color:rgba(245,243,238,0.6)">Guía rápida para evaluadores</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:10px">¿Cómo funciona esta herramienta?</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7">
+        Tienes <strong style="color:var(--text)">4 pestañas</strong> en la barra superior. Las usarás en orden durante el día:
+      </div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--text);color:#F5F3EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">1</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Act. 1 — Sistema Colapsado</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">Primero selecciona tu candidato y tu nombre. Durante la actividad física de construcción, anota lo que <em>observas</em> — no hay puntaje aquí, solo notas de comportamiento.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--text);color:#F5F3EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">2</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Caso Perú</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">Durante la preparación del caso y la presentación, asigna un puntaje del 1 al 5 en cada competencia. Puedes desplegar las señales clave si tienes duda de qué observar.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--text);color:#F5F3EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">3</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Resumen</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">El puntaje se calcula solo. Agrega fortalezas, áreas de desarrollo, un momento memorable y tu veredicto. Luego toca <strong style="color:var(--text)">"Copiar resumen"</strong> y mándalo por el canal que se indique.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--surface2);color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">+</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Working Lunch <span style="font-size:11px;font-weight:400;color:var(--text3)">(solo moderador)</span></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">El moderador pega todos los resúmenes recibidos para consolidar y comparar candidatos. Los evaluadores no necesitan usarla.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:10px">Escala de puntaje</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'DM Mono',monospace;font-weight:500;font-size:15px;min-width:20px;color:#8A2020">1</span><div><div style="font-size:13px;font-weight:500;color:var(--text)">Deficiente</div><div style="font-size:11px;color:var(--text3)">No demostró la competencia</div></div></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'DM Mono',monospace;font-weight:500;font-size:15px;min-width:20px;color:#7A4E0A">2</span><div><div style="font-size:13px;font-weight:500;color:var(--text)">Bajo</div><div style="font-size:11px;color:var(--text3)">Señales débiles, inconsistentes</div></div></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'DM Mono',monospace;font-weight:500;font-size:15px;min-width:20px;color:#5A5750">3</span><div><div style="font-size:13px;font-weight:500;color:var(--text)">Aceptable</div><div style="font-size:11px;color:var(--text3)">Cumple lo esperado para el nivel</div></div></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'DM Mono',monospace;font-weight:500;font-size:15px;min-width:20px;color:#1A6B4A">4</span><div><div style="font-size:13px;font-weight:500;color:var(--text)">Fuerte</div><div style="font-size:11px;color:var(--text3)">Por encima de lo esperado, consistente</div></div></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'DM Mono',monospace;font-weight:500;font-size:15px;min-width:20px;color:#3A2A7A">5</span><div><div style="font-size:13px;font-weight:500;color:var(--text)">Sobresaliente</div><div style="font-size:11px;color:var(--text3)">Excepcional, memorable, destacado</div></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #D4A050">
+      <div class="card-title" style="margin-bottom:6px">Tips importantes</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7">
+        <div style="margin-bottom:5px">· Evalúa <strong style="color:var(--text)">comportamientos concretos</strong>, no impresiones generales. "Estructuró bien" es vago — "propuso dividir los problemas en 3 frentes y asignó uno a cada persona" es observable.</div>
+        <div style="margin-bottom:5px">· No se evalúa quién propone <em>más</em> ideas, sino quién <strong style="color:var(--text)">prioriza mejor</strong>.</div>
+        <div style="margin-bottom:5px">· Si usas el botón "Evaluar siguiente candidato", el formulario se limpia completamente para empezar de cero.</div>
+        <div>· Ante cualquier duda durante el día, consulta a Jacobo.</div>
+      </div>
+    </div>
+
+    <button class="action-btn" onclick="goTab('eval')">Comenzar evaluación →</button>
+  </div>
+</div>
+
+
+<div class="screen active" id="screen-eval">
+  <div class="card" style="margin-top:0.75rem">
+    <div class="card-title">Datos del candidato</div>
+    <div class="card-sub">Selecciona el candidato y escribe tu nombre antes de iniciar.</div>
+    <div class="field"><label>Candidato</label>
+      <select id="candidato-select" onchange="seleccionarCandidato(this.value)">
+        <option value="">— Selecciona un candidato —</option>
+      </select>
+    </div>
+    <div id="cand-info-box" style="display:none;background:var(--bg);border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:10px;border:1px solid var(--border)">
+      <div style="font-size:12px;color:var(--text2)" id="cand-info-text"></div>
+    </div>
+    <input type="hidden" id="nombre">
+    <input type="hidden" id="grupo">
+    <input type="hidden" id="carrera">
+    <div class="field"><label>Evaluador</label>
+      <select id="evaluador">
+        <option value="">— Selecciona evaluador —</option>
+        <option>Jackelin Billingslea</option>
+        <option>Edgar Pelaez</option>
+        <option>Luis Hurtado</option>
+        <option>Andre Reyes</option>
+        <option>Jorge Barrientos</option>
+        <option>Salvador Paiz</option>
+        <option>Daphne Jager</option>
+        <option>Gustavo Boleres</option>
+        <option>Priamo Soto</option>
+        <option>Sonia Cojulun</option>
+        <option>Diana Archila</option>
+        <option>Cristian Florez</option>
+        <option>Ricardo Mata</option>
+        <option>Pablo Monzon</option>
+        <option>Jacobo Girón</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section-heading"><span class="badge badge-act1">ACT. 1</span> Sistema Colapsado — observación conductual</div>
+  <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Solo observación — sin puntaje. Anota comportamientos concretos.</div>
+
+  <div class="card">
+    <div class="card-title">Comunicación interfuncional</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Pregunta a otras etapas antes de construir</div><div class="sig-item">Comparte info sin que se la pidan</div><div class="sig-item">Verifica compatibilidad</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Construye en silencio</div><div class="sig-item">Solo habla cuando hay problema</div><div class="sig-item">Espera instrucciones</div></div>
+      </div>
+    </div>
+    <textarea id="obs-com" placeholder="Ej: 'Preguntó al Grupo B cómo terminaría su rampa antes de cortar su pieza'"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Gestión de ambigüedad</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Decide con info incompleta</div><div class="sig-item">Propone hipótesis y las prueba</div><div class="sig-item">Ajusta sin paralizarse</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Espera que le digan qué hacer</div><div class="sig-item">Se bloquea sin info completa</div><div class="sig-item">Repite la misma solución fallida</div></div>
+      </div>
+    </div>
+    <textarea id="obs-amb" placeholder="Ej: 'Cuando no tenía cinta, buscó alternativa con papel sin consultar'"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Integración vs. optimización local</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Sacrifica perfección propia por el conjunto</div><div class="sig-item">Propone ajustes para otras etapas</div><div class="sig-item">Cede recursos si el sistema lo necesita</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Optimiza su etapa aunque rompa la conexión</div><div class="sig-item">Defiende su diseño aunque falle</div><div class="sig-item">No participa en la fase de unión</div></div>
+      </div>
+    </div>
+    <textarea id="obs-int" placeholder="Ej: 'Rediseñó su rampa 2 veces para ajustarse al ángulo del Grupo A'"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Liderazgo emergente</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Organiza sin que se lo pidan</div><div class="sig-item">Destrabó una discusión</div><div class="sig-item">Tomó posición en momento de duda</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Dominó sin escuchar</div><div class="sig-item">Evitó tomar posición</div><div class="sig-item">Se desconectó cuando se le necesitaba</div></div>
+      </div>
+    </div>
+    <textarea id="obs-lid" placeholder="Ej: 'Cuando el grupo entró en bucle, propuso votar entre dos opciones'"></textarea>
+  </div>
+
+  <button class="action-btn" onclick="goTab('caso')">Continuar → Caso Perú</button>
+</div>
+
+<!-- SCREEN 2: CASO PERU -->
+<div class="screen" id="screen-caso">
+  <div class="giro-box" style="margin-top:0.75rem">
+    <div class="giro-title">Recordatorio: giro al minuto 30</div>
+    Observa cómo reacciona cuando se introduce el cambio de restricción.
+  </div>
+
+  <div class="section-heading"><span class="badge badge-act2">ACT. 2</span> Caso Perú — puntaje por competencia</div>
+
+  <div class="card">
+    <div class="card-title">Pensamiento sistémico <span style="font-size:11px;color:var(--text3);font-weight:400">· 25%</span></div>
+    <div class="card-sub">Identifica causas raíz, conecta áreas, anticipa efectos secundarios.</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Distingue síntoma vs causa raíz</div><div class="sig-item">Anticipa riesgos de implementación</div><div class="sig-item">Propone soluciones escalables</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Solo ve una parte del problema</div><div class="sig-item">Automatiza sin simplificar</div><div class="sig-item">Ignora impactos en otras áreas</div></div>
+      </div>
+    </div>
+    <div class="score-labels"><span class="score-label">Deficiente</span><span class="score-label">Bajo</span><span class="score-label">Aceptable</span><span class="score-label">Fuerte</span><span class="score-label">Sobresaliente</span></div>
+    <div class="score-row"><button class="score-btn" data-comp="sist" data-v="1" onclick="setScore(this)">1</button><button class="score-btn" data-comp="sist" data-v="2" onclick="setScore(this)">2</button><button class="score-btn" data-comp="sist" data-v="3" onclick="setScore(this)">3</button><button class="score-btn" data-comp="sist" data-v="4" onclick="setScore(this)">4</button><button class="score-btn" data-comp="sist" data-v="5" onclick="setScore(this)">5</button></div>
+    <textarea id="obs-sist" placeholder="Comportamiento concreto observado…"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Análisis y priorización <span style="font-size:11px;color:var(--text3);font-weight:400">· 20%</span></div>
+    <div class="card-sub">Estructura el problema, diferencia urgente vs importante, propone KPIs.</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Segmenta el problema</div><div class="sig-item">Diferencia urgente vs importante</div><div class="sig-item">Define KPIs útiles</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Habla en generalidades</div><div class="sig-item">Muchas ideas sin priorizar</div><div class="sig-item">Conclusiones sin sustento</div></div>
+      </div>
+    </div>
+    <div class="score-labels"><span class="score-label">Deficiente</span><span class="score-label">Bajo</span><span class="score-label">Aceptable</span><span class="score-label">Fuerte</span><span class="score-label">Sobresaliente</span></div>
+    <div class="score-row"><button class="score-btn" data-comp="anal" data-v="1" onclick="setScore(this)">1</button><button class="score-btn" data-comp="anal" data-v="2" onclick="setScore(this)">2</button><button class="score-btn" data-comp="anal" data-v="3" onclick="setScore(this)">3</button><button class="score-btn" data-comp="anal" data-v="4" onclick="setScore(this)">4</button><button class="score-btn" data-comp="anal" data-v="5" onclick="setScore(this)">5</button></div>
+    <textarea id="obs-anal" placeholder="Comportamiento concreto observado…"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Criterio en IA / tecnología <span style="font-size:11px;color:var(--text3);font-weight:400">· 20%</span></div>
+    <div class="card-sub">Propone usos concretos, distingue dónde agrega valor, considera riesgos.</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">IA para análisis, clasificación o alertas</div><div class="sig-item">Mantiene validación humana</div><div class="sig-item">Herramientas viables para un piloto</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">"Metamos IA a todo"</div><div class="sig-item">No explica para qué ni cómo</div><div class="sig-item">Ignora riesgos de sesgo</div></div>
+      </div>
+    </div>
+    <div class="score-labels"><span class="score-label">Deficiente</span><span class="score-label">Bajo</span><span class="score-label">Aceptable</span><span class="score-label">Fuerte</span><span class="score-label">Sobresaliente</span></div>
+    <div class="score-row"><button class="score-btn" data-comp="ia" data-v="1" onclick="setScore(this)">1</button><button class="score-btn" data-comp="ia" data-v="2" onclick="setScore(this)">2</button><button class="score-btn" data-comp="ia" data-v="3" onclick="setScore(this)">3</button><button class="score-btn" data-comp="ia" data-v="4" onclick="setScore(this)">4</button><button class="score-btn" data-comp="ia" data-v="5" onclick="setScore(this)">5</button></div>
+    <textarea id="obs-ia" placeholder="Comportamiento concreto observado…"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Viabilidad e impacto <span style="font-size:11px;color:var(--text3);font-weight:400">· 20%</span></div>
+    <div class="card-sub">La propuesta es realista, respeta restricciones y tiene plan 30-60-90.</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Respeta restricciones del caso</div><div class="sig-item">Plan de implementación concreto</div><div class="sig-item">Prioridades coherentes con la crisis</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Soluciones ideales sin recursos</div><div class="sig-item">Sin plan de implementación</div><div class="sig-item">Ignora restricciones regulatorias</div></div>
+      </div>
+    </div>
+    <div class="score-labels"><span class="score-label">Deficiente</span><span class="score-label">Bajo</span><span class="score-label">Aceptable</span><span class="score-label">Fuerte</span><span class="score-label">Sobresaliente</span></div>
+    <div class="score-row"><button class="score-btn" data-comp="viab" data-v="1" onclick="setScore(this)">1</button><button class="score-btn" data-comp="viab" data-v="2" onclick="setScore(this)">2</button><button class="score-btn" data-comp="viab" data-v="3" onclick="setScore(this)">3</button><button class="score-btn" data-comp="viab" data-v="4" onclick="setScore(this)">4</button><button class="score-btn" data-comp="viab" data-v="5" onclick="setScore(this)">5</button></div>
+    <textarea id="obs-viab" placeholder="Comportamiento concreto observado…"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Liderazgo y defensa ejecutiva <span style="font-size:11px;color:var(--text3);font-weight:400">· 15%</span></div>
+    <div class="card-sub">Comunica con claridad, defiende con criterio, integra perspectivas del grupo.</div>
+    <button class="signals-toggle" onclick="toggleSig(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ver señales clave</button>
+    <div class="signals-box">
+      <div class="signals-grid">
+        <div><div class="sig-title g">Fuertes</div><div class="sig-item">Presenta con estructura clara</div><div class="sig-item">Responde preguntas difíciles con criterio</div><div class="sig-item">Integra aportes del equipo</div></div>
+        <div><div class="sig-title r">Alertas</div><div class="sig-item">Evade preguntas directas</div><div class="sig-item">Repite puntos sin agregar</div><div class="sig-item">Se derrumba ante presión del panel</div></div>
+      </div>
+    </div>
+    <div class="score-labels"><span class="score-label">Deficiente</span><span class="score-label">Bajo</span><span class="score-label">Aceptable</span><span class="score-label">Fuerte</span><span class="score-label">Sobresaliente</span></div>
+    <div class="score-row"><button class="score-btn" data-comp="lid2" data-v="1" onclick="setScore(this)">1</button><button class="score-btn" data-comp="lid2" data-v="2" onclick="setScore(this)">2</button><button class="score-btn" data-comp="lid2" data-v="3" onclick="setScore(this)">3</button><button class="score-btn" data-comp="lid2" data-v="4" onclick="setScore(this)">4</button><button class="score-btn" data-comp="lid2" data-v="5" onclick="setScore(this)">5</button></div>
+    <textarea id="obs-lid2" placeholder="Comportamiento concreto observado…"></textarea>
+  </div>
+
+  <div class="card" style="border-left:3px solid #D4A050">
+    <div class="card-title">Pregunta de integridad</div>
+    <div class="card-sub" style="margin-bottom:8px">"Si tuvieras que contratar a un extranjero indocumentado en Perú para salvar la venta, ¿lo harías?"</div>
+    <textarea id="obs-int2" placeholder="Anota la respuesta literal o el razonamiento dado…" style="margin-bottom:8px"></textarea>
+    <div class="field"><label>Lectura del evaluador</label></div>
+    <div class="verdict-row">
+      <button class="v-btn" id="int-claro" onclick="setIntegridad('claro')">Ético claro</button>
+      <button class="v-btn" id="int-duda" onclick="setIntegridad('duda')">Ambiguo</button>
+      <button class="v-btn" id="int-fallo" onclick="setIntegridad('fallo')">Justificó</button>
+    </div>
+  </div>
+
+  <button class="action-btn" onclick="goTab('resumen')">Ver resumen →</button>
+</div>
+
+<!-- SCREEN 3: RESUMEN -->
+<div class="screen" id="screen-resumen">
+  <div class="summary-block" style="margin-top:0.75rem">
+    <div class="card-title" style="margin-bottom:12px">Puntaje ponderado — Caso Perú</div>
+    <div id="score-breakdown"></div>
+    <div class="total-row">
+      <span class="total-label">Puntaje final</span>
+      <span class="total-num" id="total-display">—</span>
+    </div>
+  </div>
+  <div id="act1-summary-block" style="display:none">
+    <div style="font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin:1rem 0 8px">Observaciones Act. 1 — resumen automático</div>
+    <div class="card" style="padding:0.875rem">
+      <div id="act1-summary-content" style="font-size:12px;color:var(--text2);line-height:1.7"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:4px">Fortalezas observadas</div>
+    <div class="card-sub">Ambas actividades</div>
+    <textarea id="obs-fortalezas" placeholder="¿Qué destacó en este candidato durante ambas actividades?"></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:4px">Áreas de desarrollo</div>
+    <div class="card-sub">Ambas actividades</div>
+    <textarea id="obs-desarrollo" placeholder="¿Qué le faltó de forma consistente?"></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:8px">Momento memorable</div>
+    <textarea id="obs-memorable" placeholder="Un momento específico para compartir en el Working Lunch…"></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:4px">Veredicto preliminar</div>
+    <div class="card-sub" style="margin-bottom:8px">Selecciona la categoría interna del candidato</div>
+    <div class="verdict-row">
+      <button class="v-btn" id="vrd-adv" onclick="setVeredicto('adv')">T1 <span style="font-weight:400;font-size:11px">Avanzar</span></button>
+      <button class="v-btn" id="vrd-obs" onclick="setVeredicto('obs')">T2 <span style="font-weight:400;font-size:11px">Por discutir</span></button>
+      <button class="v-btn" id="vrd-des" onclick="setVeredicto('des')">T3 <span style="font-weight:400;font-size:11px">Descartar</span></button>
+    </div>
+  </div>
+  <button class="action-btn" onclick="copiarResumen()">Copiar resumen para Working Lunch</button>
+  <button class="action-btn secondary" onclick="limpiarFormulario()">Evaluar siguiente candidato</button>
+</div>
+
+<!-- SCREEN 4: WORKING LUNCH -->
+<div class="screen" id="screen-wl">
+
+  <div class="wl-import" style="margin-top:0.75rem">
+    <div class="card-title" style="margin-bottom:3px">Pegar evaluaciones</div>
+    <div class="card-sub">Pega todos los resúmenes recibidos juntos — el sistema los separa automáticamente.</div>
+    <textarea id="wl-paste" placeholder="Pega aquí todos los resúmenes que te mandaron los evaluadores (pueden ser varios a la vez)..." style="min-height:100px;margin-bottom:8px"></textarea>
+    <button class="action-btn" style="margin-top:0" onclick="wlImportar()">Procesar evaluaciones</button>
+    <div id="wl-import-msg" style="font-size:12px;margin-top:6px;min-height:16px"></div>
+  </div>
+
+  <div id="wl-stats-row" style="display:none">
+    <div style="font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin:1rem 0 8px">Resumen por grupo</div>
+    <div id="wl-group-summary"></div>
+
+    <div style="font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin:1rem 0 8px">Todos los candidatos</div>
+    <div class="filter-row">
+      <button class="f-btn active" onclick="wlSetFiltro('todos',this)">Todos</button>
+      <button class="f-btn" onclick="wlSetFiltro('adv',this)">T1</button>
+      <button class="f-btn" onclick="wlSetFiltro('obs',this)">T2</button>
+      <button class="f-btn" onclick="wlSetFiltro('des',this)">T3</button>
+      <button class="f-btn" onclick="wlSetFiltro('conflicto',this)">Conflicto</button>
+    </div>
+    <div id="wl-lista"></div>
+    <button class="action-btn secondary" onclick="wlExportar()">Exportar resumen final ↗</button>
+  </div>
+
+  <div id="wl-empty" class="empty-state"><div style="font-size:28px;opacity:0.3">—</div><p>Pega los resúmenes para comenzar</p></div>
+</div>
+
+<!-- MODAL WORKING LUNCH -->
+<div class="modal-overlay" id="wl-modal" onclick="cerrarModalOverlay(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="wl-modal-nombre">—</div>
+    <div class="modal-sub" id="wl-modal-meta">—</div>
+    <div id="wl-modal-body"></div>
+  </div>
+</div>
+
+<script>
+const CANDIDATOS = [
+  {nombre:"Abby Urrea",carrera:"Business Analytics",uni:"UVG",grupo:"Grupo Azul"},
+  {nombre:"Frida Alarcón",carrera:"Bioquímica y microbiología",uni:"UVG",grupo:"Grupo Amarillo"},
+  {nombre:"Majo Vásquez",carrera:"Business Analytics",uni:"UVG",grupo:"Grupo Morado"},
+  {nombre:"José Romero Muralles",carrera:"Ingeniería Industrial",uni:"URL",grupo:"Grupo Azul"},
+  {nombre:"María José Herrera Miranda",carrera:"Ingeniería Industrial",uni:"USAC",grupo:"Grupo Azul"},
+  {nombre:"Alejandro José Ruiz Ortiz",carrera:"Ingeniería Química",uni:"UVG",grupo:"Grupo Azul"},
+  {nombre:"Oscar Méndez",carrera:"Ingeniería en Alimentos",uni:"UVG",grupo:"Grupo Rojo"},
+  {nombre:"Natalia Morales",carrera:"Mercadotecnia",uni:"UVG",grupo:"Grupo Azul"},
+  {nombre:"María Fernanda Bojórquez Mejía",carrera:"Ingeniería en Ciencias de la Administración",uni:"UVG",grupo:"Grupo Morado"},
+  {nombre:"Milton Giovanni Polanco Serrano",carrera:"Ingeniería en Sistemas",uni:"UVG",grupo:"Grupo Morado"},
+  {nombre:"Oscar Xavier Zúñiga Gutierrez",carrera:"Ingeniería Industrial",uni:"URL",grupo:"Grupo Morado"},
+  {nombre:"María Paula Huard Santizo",carrera:"Ingeniería Química",uni:"UVG",grupo:"Grupo Morado"},
+  {nombre:"Luis Leonardo Gómez Chang",carrera:"Ingeniería Industrial",uni:"UVG",grupo:"Grupo Amarillo"},
+  {nombre:"Adriana Medrano",carrera:"Mercadotecnia",uni:"UVG",grupo:"Grupo Morado"},
+  {nombre:"Paolo David Fuentes Castillo",carrera:"Ingeniería Industrial",uni:"UVG",grupo:"Grupo Amarillo"},
+  {nombre:"Adriana Dubón",carrera:"Ingeniería Química",uni:"UVG",grupo:"Grupo Amarillo"},
+  {nombre:"Josué Rodrigo Alvarado Marroquín",carrera:"Mercadotecnia",uni:"URL",grupo:"Grupo Amarillo"},
+  {nombre:"Ana Arroyo Aguilar",carrera:"Nutrición",uni:"URL",grupo:"Grupo Amarillo"},
+  {nombre:"Arleth Michelle Solorzano Castillo",carrera:"Administración de Empresa",uni:"UVG",grupo:"Grupo Rojo"},
+  {nombre:"Mauricio Ruiz",carrera:"Ingeniería Industrial",uni:"URL",grupo:"Grupo Morado"},
+  {nombre:"Martin Cuellar",carrera:"Ingeniería Comercial",uni:"UNIS",grupo:"Grupo Rojo"},
+  {nombre:"Jose Ernesto González Palma",carrera:"Ingeniería Industrial",uni:"Upana",grupo:"Grupo Rojo"},
+  {nombre:"Giuliana Bucci Valdez",carrera:"Ingeniería Industrial",uni:"UVG",grupo:"Grupo Rojo"},
+  {nombre:"Ana Laura Leal Cabrera",carrera:"Ingeniería en biotecnología industrial",uni:"UVG",grupo:"Grupo Verde"},
+  {nombre:"Javier Andrés Rivera Solórzano",carrera:"Comercio y Relaciones Internacionales",uni:"UFM",grupo:"Grupo Azul"},
+  {nombre:"Saul Alejandro Ovalle Montenegro",carrera:"Ingeniería en Sistemas",uni:"URL",grupo:"Grupo Verde"},
+  {nombre:"Diego Martínez García",carrera:"Ingeniería Industrial",uni:"URL",grupo:"Grupo Verde"},
+  {nombre:"Ana Lucía Soto Noriega",carrera:"Ingeniería Mecatrónica",uni:"UVG",grupo:"Grupo Amarillo"},
+  {nombre:"Juan Daniel Suruy Mayén",carrera:"Ingeniería Mecánica Industrial",uni:"UVG",grupo:"Grupo Verde"},
+  {nombre:"Angy Morales Aguilar",carrera:"International Marketing and business analytics",uni:"UVG",grupo:"Grupo Verde"},
+  {nombre:"Sofía Mei Lin López lam",carrera:"Nutrición",uni:"UVG",grupo:"Grupo Verde"},
+  {nombre:"Ximena Soria García",carrera:"Licenciatura en Ciencias Jurídicas y Sociales",uni:"Upana",grupo:"Grupo Rojo"},
+];
+
+const grupoColors = {"Grupo Azul":"#1A4A8A","Grupo Amarillo":"#8A6A0A","Grupo Morado":"#4A3A8A","Grupo Rojo":"#8A2020","Grupo Verde":"#1A6B4A"};
+const grupoBgs = {"Grupo Azul":"#E6EEFA","Grupo Amarillo":"#FDF0D5","Grupo Morado":"#EEEAFC","Grupo Rojo":"#FAEBEB","Grupo Verde":"#E6F2EC"};
+
+function initSelector(){
+  const sel = document.getElementById('candidato-select');
+  const grupos = [...new Set(CANDIDATOS.map(c=>c.grupo))].sort();
+  grupos.forEach(g=>{
+    const og = document.createElement('optgroup');
+    og.label = g;
+    CANDIDATOS.filter(c=>c.grupo===g).sort((a,b)=>a.nombre.localeCompare(b.nombre)).forEach(c=>{
+      const o = document.createElement('option');
+      o.value = c.nombre;
+      o.textContent = c.nombre;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+}
+
+function seleccionarCandidato(nombre){
+  const c = CANDIDATOS.find(x=>x.nombre===nombre);
+  if(!c){document.getElementById('cand-info-box').style.display='none';return;}
+  document.getElementById('nombre').value = c.nombre;
+  document.getElementById('grupo').value = c.grupo;
+  document.getElementById('carrera').value = c.carrera+' · '+c.uni;
+  const color = grupoColors[c.grupo]||'var(--text2)';
+  const bg = grupoBgs[c.grupo]||'var(--bg)';
+  document.getElementById('cand-info-box').style.display='block';
+  document.getElementById('cand-info-box').style.background = bg;
+  document.getElementById('cand-info-box').style.borderColor = color+'44';
+  document.getElementById('cand-info-text').innerHTML = `<span style="font-weight:600;color:${color}">${c.grupo}</span> &nbsp;·&nbsp; ${c.carrera} &nbsp;·&nbsp; ${c.uni}`;
+}
+
+
+const scores={};
+const comps=[
+  {id:'sist',label:'Pensamiento sistémico',peso:0.25},
+  {id:'anal',label:'Análisis y priorización',peso:0.20},
+  {id:'ia',label:'Criterio IA / tecnología',peso:0.20},
+  {id:'viab',label:'Viabilidad e impacto',peso:0.20},
+  {id:'lid2',label:'Liderazgo y defensa',peso:0.15}
+];
+let veredicto=null,integridad=null;
+let wlCandidatos={},wlDecisiones={},wlNotas={},wlFiltro='todos';
+// ── LOCALSTORAGE AUTO-SAVE ──
+const LS_KEY='scholars_pdc_2026_eval';
+
+function lsGuardar(){
+  const data={
+    nombre:document.getElementById('nombre').value,
+    grupo:document.getElementById('grupo').value,
+    carrera:document.getElementById('carrera').value,
+    evaluador:document.getElementById('evaluador').value,
+    candidatoSelect:document.getElementById('candidato-select').value,
+    scores:{...scores},
+    veredicto,integridad,
+    obs:{},
+    wlCandidatos,wlDecisiones,wlNotas
+  };
+  ['obs-com','obs-amb','obs-int','obs-lid','obs-sist','obs-anal','obs-ia','obs-viab','obs-lid2','obs-int2','obs-fortalezas','obs-desarrollo','obs-memorable'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)data.obs[id]=el.value;
+  });
+  try{localStorage.setItem(LS_KEY,JSON.stringify(data));}catch(e){}
+}
+
+function lsRestaurar(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    if(data.candidatoSelect){
+      document.getElementById('candidato-select').value=data.candidatoSelect;
+      seleccionarCandidato(data.candidatoSelect);
+    }
+    if(data.evaluador)document.getElementById('evaluador').value=data.evaluador;
+    if(data.scores)Object.assign(scores,data.scores);
+    if(data.veredicto){veredicto=data.veredicto;['adv','obs','des'].forEach(x=>{const el=document.getElementById('vrd-'+x);if(el)el.className='v-btn'+(x===veredicto?' sel-'+x:'');});}
+    if(data.integridad){integridad=data.integridad;['claro','duda','fallo'].forEach(x=>{const el=document.getElementById('int-'+x);if(el)el.className='v-btn'+(x===integridad?' sel-'+x:'');});}
+    if(data.obs){Object.entries(data.obs).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val;});}
+    if(data.scores){Object.entries(data.scores).forEach(([comp,val])=>{
+      const btns=document.querySelectorAll(`.score-btn[data-comp="${comp}"]`);
+      btns.forEach(b=>{b.className='score-btn'+(parseInt(b.dataset.v)===val?' s'+val:'');});
+    });}
+    if(data.wlCandidatos)Object.assign(wlCandidatos,data.wlCandidatos);
+    if(data.wlDecisiones)Object.assign(wlDecisiones,data.wlDecisiones);
+    if(data.wlNotas)Object.assign(wlNotas,data.wlNotas);
+    if(Object.keys(wlCandidatos).length){document.getElementById('wl-stats-row').style.display='block';document.getElementById('wl-empty').style.display='none';}
+    showToast('Datos restaurados');
+  }catch(e){}
+}
+
+function lsLimpiar(){
+  try{localStorage.removeItem(LS_KEY);}catch(e){}
+}
+
+// Auto-save every 15 seconds and on any input
+setInterval(lsGuardar, 15000);
+document.addEventListener('input', lsGuardar);
+document.addEventListener('click', ()=>setTimeout(lsGuardar,300));
+
+initSelector();
+// Restore after a short delay so DOM is ready
+setTimeout(lsRestaurar, 200);
+
+function goTab(tab){
+  const map={intro:'screen-intro',eval:'screen-eval',caso:'screen-caso',resumen:'screen-resumen',wl:'screen-wl'};
+  const modeMap={intro:'INSTRUCCIONES',eval:'EVALUACIÓN',caso:'EVALUACIÓN',resumen:'RESUMEN',wl:'WORKING LUNCH'};
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(map[tab]).classList.add('active');
+  document.querySelectorAll('.tab-btn')[{intro:0,eval:1,caso:2,resumen:3,wl:4}[tab]].classList.add('active');
+  document.getElementById('mode-tag').textContent=modeMap[tab];
+  if(tab==='resumen')renderResumen();
+  if(tab==='wl')wlRender();
+  window.scrollTo(0,0);
+}
+
+function toggleSig(btn){
+  const box=btn.nextElementSibling;
+  box.classList.toggle('open');
+  btn.querySelector('svg').style.transform=box.classList.contains('open')?'rotate(180deg)':'';
+}
+
+function setScore(btn){
+  const comp=btn.dataset.comp,val=parseInt(btn.dataset.v);
+  scores[comp]=val;
+  btn.closest('.score-row').querySelectorAll('.score-btn').forEach(b=>{
+    b.className='score-btn'+(parseInt(b.dataset.v)===val?' s'+val:'');
+  });
+}
+
+function setVeredicto(v){
+  veredicto=v;
+  ['adv','obs','des'].forEach(x=>{document.getElementById('vrd-'+x).className='v-btn'+(x===v?' sel-'+v:'');});
+}
+
+function setIntegridad(v){
+  integridad=v;
+  ['claro','duda','fallo'].forEach(x=>{document.getElementById('int-'+x).className='v-btn'+(x===v?' sel-'+x:'');});
+}
+
+function renderResumen(){
+  let total=0,hasAll=true;
+  const bd=document.getElementById('score-breakdown');
+  bd.innerHTML='';
+  comps.forEach(c=>{
+    const s=scores[c.id];
+    if(!s)hasAll=false;
+    const col=s>=4?'var(--green)':s>=3?'var(--amber)':s?'var(--red)':'var(--text3)';
+    const row=document.createElement('div');
+    row.className='score-row-summary';
+    row.innerHTML=`<span class="score-name">${c.label} <span style="color:var(--text3)">(${Math.round(c.peso*100)}%)</span></span><span class="score-num" style="color:${col}">${s?s+'/5':'—'}</span>`;
+    bd.appendChild(row);
+    if(s)total+=s*c.peso;
+  });
+  const el=document.getElementById('total-display');
+  if(hasAll){el.textContent=total.toFixed(2)+'/5';el.style.color=total>=4?'var(--green)':total>=3?'var(--amber)':'var(--red)';}
+  else{el.textContent='—';el.style.color='var(--text3)';}
+
+  const obsFields=[
+    {id:'obs-com',label:'Comunicación interfuncional'},
+    {id:'obs-amb',label:'Gestión de ambigüedad'},
+    {id:'obs-int',label:'Integración vs. optimización'},
+    {id:'obs-lid',label:'Liderazgo emergente'}
+  ];
+  const filled=obsFields.filter(f=>document.getElementById(f.id)&&document.getElementById(f.id).value.trim());
+  const block=document.getElementById('act1-summary-block');
+  const cont=document.getElementById('act1-summary-content');
+  if(filled.length){
+    block.style.display='block';
+    cont.innerHTML=filled.map(f=>`<div style="margin-bottom:8px"><span style="font-weight:600;color:var(--text)">${f.label}:</span> ${document.getElementById(f.id).value.trim()}</div>`).join('');
+  } else {
+    block.style.display='none';
+  }
+}
+
+function copiarResumen(){
+  const nombre=document.getElementById('nombre').value||'(sin nombre)';
+  const grupo=document.getElementById('grupo').value||'—';
+  const evaluador=document.getElementById('evaluador').value||'—';
+  const carrera=document.getElementById('carrera').value||'—';
+  let total=0,hasAll=true;
+  comps.forEach(c=>{if(scores[c.id])total+=scores[c.id]*c.peso;else hasAll=false;});
+  const totalStr=hasAll?total.toFixed(2)+'/5':'incompleto';
+  const vLabel={adv:'T1 — AVANZAR',obs:'T2 — POR DISCUTIR',des:'T3 — DESCARTAR'}[veredicto]||'Sin definir';
+  const iLabel={claro:'Criterio ético claro',duda:'Ambiguo / dudó',fallo:'Justificó la práctica'}[integridad]||'No evaluada';
+  let lines=[`EVALUACIÓN — ${nombre}`,`Grupo: ${grupo} | Carrera: ${carrera} | Evaluador: ${evaluador}`,`PUNTAJE: ${totalStr}`];
+  comps.forEach(c=>lines.push(`  ${c.label}: ${scores[c.id]||'—'}/5`));
+  lines.push(`INTEGRIDAD: ${iLabel}`,`VEREDICTO: ${vLabel}`);
+  const f=document.getElementById('obs-fortalezas').value;
+  const d=document.getElementById('obs-desarrollo').value;
+  const m=document.getElementById('obs-memorable').value;
+  if(f)lines.push(`FORTALEZAS: ${f}`);
+  if(d)lines.push(`DESARROLLO: ${d}`);
+  if(m)lines.push(`MEMORABLE: ${m}`);
+  const txt=lines.join('\n');
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>showToast('Resumen copiado')).catch(()=>fallbackCopy(txt));}
+  else fallbackCopy(txt);
+}
+
+function fallbackCopy(txt){
+  const ta=document.createElement('textarea');
+  ta.value=txt;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');showToast('Resumen copiado');}catch(e){showToast('Copia manual necesaria');}
+  document.body.removeChild(ta);
+}
+
+function limpiarFormulario(){
+  ['nombre','carrera','grupo','evaluador','obs-com','obs-amb','obs-int','obs-lid','obs-sist','obs-anal','obs-ia','obs-viab','obs-lid2','obs-int2','obs-fortalezas','obs-desarrollo','obs-memorable'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('candidato-select').value='';
+  document.getElementById('cand-info-box').style.display='none';
+  Object.keys(scores).forEach(k=>delete scores[k]);
+  document.querySelectorAll('.score-btn').forEach(b=>b.className='score-btn');
+  veredicto=null;integridad=null;
+  ['adv','obs','des'].forEach(x=>{const el=document.getElementById('vrd-'+x);if(el)el.className='v-btn';});
+  ['claro','duda','fallo'].forEach(x=>{const el=document.getElementById('int-'+x);if(el)el.className='v-btn';});
+  lsLimpiar();
+  goTab('eval');
+  showToast('Listo para el siguiente candidato');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function parsearResumen(txt){
+  const lines=txt.split('\n').map(l=>l.trim()).filter(Boolean);
+  const data={nombre:'',grupo:'',carrera:'',evaluador:'',score:null,veredicto:null,integridad:null,fortalezas:'',desarrollo:'',memorable:''};
+  lines.forEach(l=>{
+    if(l.startsWith('EVALUACIÓN —'))data.nombre=l.replace('EVALUACIÓN —','').trim();
+    if(l.startsWith('Grupo:')){const p=l.split('|');data.grupo=p[0].replace('Grupo:','').trim();if(p[1])data.carrera=p[1].replace('Carrera:','').trim();if(p[2])data.evaluador=p[2].replace('Evaluador:','').trim();}
+    if(l.startsWith('PUNTAJE:')){const m=l.match(/([\d.]+)\/5/);if(m)data.score=parseFloat(m[1]);}
+    if(l.startsWith('INTEGRIDAD:')){const v=l.replace('INTEGRIDAD:','').trim();if(v.includes('claro'))data.integridad='claro';else if(v.includes('Ambiguo'))data.integridad='duda';else if(v.includes('Justific'))data.integridad='fallo';}
+    if(l.startsWith('VEREDICTO:')){const v=l.replace('VEREDICTO:','').trim();if(v.includes('AVANZAR')||v.includes('T1'))data.veredicto='adv';else if(v.includes('DISCUTIR')||v.includes('T2'))data.veredicto='obs';else if(v.includes('DESCARTAR')||v.includes('T3'))data.veredicto='des';}
+    if(l.startsWith('FORTALEZAS:'))data.fortalezas=l.replace('FORTALEZAS:','').trim();
+    if(l.startsWith('DESARROLLO:'))data.desarrollo=l.replace('DESARROLLO:','').trim();
+    if(l.startsWith('MEMORABLE:'))data.memorable=l.replace('MEMORABLE:','').trim();
+  });
+  return data;
+}
+
+function wlImportar(){
+  const txt=document.getElementById('wl-paste').value.trim();
+  if(!txt){showToast('Pega resúmenes primero');return;}
+  const blocks=txt.split(/(?=EVALUACIÓN —)/).map(b=>b.trim()).filter(b=>b.startsWith('EVALUACIÓN —'));
+  if(!blocks.length){showToast('No se encontraron evaluaciones válidas');return;}
+  let added=0,errors=0;
+  blocks.forEach(block=>{
+    const data=parsearResumen(block);
+    if(!data.nombre){errors++;return;}
+    const key=data.nombre.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_áéíóúñü]/g,'');
+    if(!wlCandidatos[key])wlCandidatos[key]={nombre:data.nombre,grupo:data.grupo,carrera:data.carrera,evals:[]};
+    const alreadyFrom=wlCandidatos[key].evals.find(e=>e.evaluador===data.evaluador);
+    if(!alreadyFrom){
+      wlCandidatos[key].evals.push({evaluador:data.evaluador,score:data.score,veredicto:data.veredicto,integridad:data.integridad,fortalezas:data.fortalezas,desarrollo:data.desarrollo,memorable:data.memorable});
+      added++;
+    }
+  });
+  document.getElementById('wl-paste').value='';
+  const msg=document.getElementById('wl-import-msg');
+  msg.textContent=`${added} evaluación(es) agregada(s)${errors?' · '+errors+' no leída(s)':''}`;
+  msg.style.color=errors?'var(--amber)':'var(--green)';
+  setTimeout(()=>msg.textContent='',4000);
+  wlRender();
+}
+
+function wlGetCons(cand){
+  const ss=cand.evals.map(e=>e.score).filter(s=>s!==null);
+  const avg=ss.length?ss.reduce((a,b)=>a+b,0)/ss.length:null;
+  const vv=cand.evals.map(e=>e.veredicto).filter(Boolean);
+  const conflicto=new Set(vv).size>1;
+  const vMaj=vv.length?vv.sort((a,b)=>vv.filter(v=>v===b).length-vv.filter(v=>v===a).length)[0]:null;
+  const ii=cand.evals.map(e=>e.integridad).filter(Boolean);
+  const iMaj=ii.length?ii.sort((a,b)=>ii.filter(v=>v===b).length-ii.filter(v=>v===a).length)[0]:null;
+  return{avg,conflicto,vMaj,iMaj};
+}
+
+function wlSetFiltro(f,btn){
+  wlFiltro=f;
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  wlRender();
+}
+
+function wlRender(){
+  const vStyles={adv:'background:#E6F2EC;color:#1A6B4A',obs:'background:#EEEAFC;color:#4A3A8A',des:'background:#FAEBEB;color:#8A2020'};
+  const vLabels={adv:'T1 — Avanzar',obs:'T2 — Por discutir',des:'T3 — Descartar'};
+  const tLabels={adv:'T1',obs:'T2',des:'T3'};
+  const iStyles={claro:'background:#E6F2EC;color:#1A6B4A',duda:'background:#FDF0D5;color:#8A5A0A',fallo:'background:#FAEBEB;color:#8A2020'};
+  const iLabels={claro:'Ético claro',duda:'Ambiguo',fallo:'Justificó práctica'};
+  const lista=Object.entries(wlCandidatos).map(([k,c])=>({key:k,...c,...wlGetCons(c)}));
+  const filtered=lista.filter(c=>{
+    const dec=wlDecisiones[c.key]||c.vMaj;
+    if(wlFiltro==='adv')return dec==='adv';
+    if(wlFiltro==='obs')return dec==='obs';
+    if(wlFiltro==='des')return dec==='des';
+    if(wlFiltro==='conflicto')return c.conflicto&&!wlDecisiones[c.key];
+    return true;
+  }).sort((a,b)=>{
+    const gA=a.grupo||'',gB=b.grupo||'';
+    if(gA!==gB)return gA.localeCompare(gB);
+    return (b.avg??0)-(a.avg??0);
+  });
+
+  const emptyEl=document.getElementById('wl-empty');
+  const statsRow=document.getElementById('wl-stats-row');
+
+  if(!lista.length){
+    emptyEl.style.display='block';
+    statsRow.style.display='none';
+    return;
+  }
+  emptyEl.style.display='none';
+  statsRow.style.display='block';
+
+  // Group summary table
+  const grupos=['Grupo Azul','Grupo Amarillo','Grupo Morado','Grupo Rojo','Grupo Verde'];
+  const groupEl=document.getElementById('wl-group-summary');
+  const grupoColors2={"Grupo Azul":"#1A4A8A","Grupo Amarillo":"#8A6A0A","Grupo Morado":"#4A3A8A","Grupo Rojo":"#8A2020","Grupo Verde":"#1A6B4A"};
+  const grupoBgs2={"Grupo Azul":"#E6EEFA","Grupo Amarillo":"#FDF0D5","Grupo Morado":"#EEEAFC","Grupo Rojo":"#FAEBEB","Grupo Verde":"#E6F2EC"};
+
+  groupEl.innerHTML=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:var(--surface2)">
+        <th style="padding:8px 10px;text-align:left;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border)">Grupo</th>
+        <th style="padding:8px 6px;text-align:center;font-weight:600;color:#1A6B4A;border-bottom:1px solid var(--border)">T1</th>
+        <th style="padding:8px 6px;text-align:center;font-weight:600;color:#4A3A8A;border-bottom:1px solid var(--border)">T2</th>
+        <th style="padding:8px 6px;text-align:center;font-weight:600;color:#8A2020;border-bottom:1px solid var(--border)">T3</th>
+        <th style="padding:8px 6px;text-align:center;font-weight:600;color:var(--text3);border-bottom:1px solid var(--border)">—</th>
+        <th style="padding:8px 6px;text-align:center;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border)">Total</th>
+      </tr></thead>
+      <tbody>${grupos.map(g=>{
+        const gc=lista.filter(c=>c.grupo===g);
+        if(!gc.length)return '';
+        const t1=gc.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='adv').length;
+        const t2=gc.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='obs').length;
+        const t3=gc.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='des').length;
+        const nd=gc.filter(c=>!(wlDecisiones[c.key]||c.vMaj)).length;
+        const color=grupoColors2[g]||'var(--text)';
+        const bg=grupoBgs2[g]||'var(--bg)';
+        return `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:8px 10px;font-weight:600;color:${color};background:${bg}22">${g.replace('Grupo ','')}</td>
+          <td style="padding:8px 6px;text-align:center;font-weight:600;color:#1A6B4A">${t1||'—'}</td>
+          <td style="padding:8px 6px;text-align:center;font-weight:600;color:#4A3A8A">${t2||'—'}</td>
+          <td style="padding:8px 6px;text-align:center;font-weight:600;color:#8A2020">${t3||'—'}</td>
+          <td style="padding:8px 6px;text-align:center;color:var(--text3)">${nd||'—'}</td>
+          <td style="padding:8px 6px;text-align:center;font-weight:500;color:var(--text)">${gc.length}</td>
+        </tr>`;
+      }).join('')}
+      <tr style="background:var(--surface2)">
+        <td style="padding:8px 10px;font-weight:600;color:var(--text)">Total</td>
+        <td style="padding:8px 6px;text-align:center;font-weight:600;color:#1A6B4A">${lista.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='adv').length||'—'}</td>
+        <td style="padding:8px 6px;text-align:center;font-weight:600;color:#4A3A8A">${lista.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='obs').length||'—'}</td>
+        <td style="padding:8px 6px;text-align:center;font-weight:600;color:#8A2020">${lista.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='des').length||'—'}</td>
+        <td style="padding:8px 6px;text-align:center;color:var(--text3)">${lista.filter(c=>!(wlDecisiones[c.key]||c.vMaj)).length||'—'}</td>
+        <td style="padding:8px 6px;text-align:center;font-weight:600;color:var(--text)">${lista.length}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>`;
+
+  const listEl=document.getElementById('wl-lista');
+  if(!filtered.length){listEl.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--text3);font-size:13px">Sin candidatos en este filtro</div>';return;}
+
+  // Group candidates by grupo
+  const byGrupo={};
+  filtered.forEach(c=>{const g=c.grupo||'Sin grupo';if(!byGrupo[g])byGrupo[g]=[];byGrupo[g].push(c);});
+
+  listEl.innerHTML=Object.entries(byGrupo).sort(([a],[b])=>a.localeCompare(b)).map(([g,cands])=>{
+    const color=grupoColors2[g]||'var(--text)';
+    const bg=grupoBgs2[g]||'var(--bg)';
+    const cards=cands.map(c=>{
+      const dec=wlDecisiones[c.key]||c.vMaj;
+      const tLabel=dec?tLabels[dec]:'?';
+      const tStyle=dec?vStyles[dec]:'background:var(--surface2);color:var(--text3)';
+      const conflicto=c.conflicto&&!wlDecisiones[c.key]?'<span class="conflict-badge" style="margin-left:4px">conflicto</span>':'';
+      const sc=c.avg>=4?'high':c.avg>=3?'mid':c.avg!==null?'low':'none';
+      const evNames=c.evals.map(e=>e.evaluador||'?').join(', ');
+      const intBadge=c.iMaj?`<span class="badge" style="${iStyles[c.iMaj]};margin-left:4px">${iLabels[c.iMaj]}</span>`:'';
+      // Collect unique fortalezas and desarrollo notes
+      const forts=c.evals.map(e=>e.fortalezas).filter(Boolean);
+      const devs=c.evals.map(e=>e.desarrollo).filter(Boolean);
+      const memos=c.evals.map(e=>e.memorable).filter(Boolean);
+      return `<div class="cand-card" onclick="wlAbrirModal('${c.key}')">
+        <div class="cand-top">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span class="badge" style="${tStyle};font-size:12px;padding:3px 10px">${tLabel}</span>
+              <span class="cand-name">${c.nombre}${conflicto}</span>
+            </div>
+            <div class="cand-meta" style="margin-top:2px">${c.carrera||'—'} · Evaluado por: ${evNames}</div>
+          </div>
+          <div class="score-big ${sc}" style="margin-left:8px">${c.avg!==null?c.avg.toFixed(1):'—'}</div>
+        </div>
+        ${forts.length?`<div style="font-size:11px;color:var(--green);margin-top:4px">+ ${forts[0]}${forts.length>1?' <em>(+'+( forts.length-1)+')</em>':''}</div>`:''}
+        ${devs.length?`<div style="font-size:11px;color:var(--red);margin-top:2px">△ ${devs[0]}${devs.length>1?' <em>(+'+(devs.length-1)+')</em>':''}</div>`:''}
+        ${intBadge}
+      </div>`;
+    }).join('');
+    return `<div style="margin-bottom:4px;padding:6px 10px;background:${bg};border-radius:var(--radius-sm);font-size:11px;font-weight:600;color:${color};letter-spacing:0.3px">${g.toUpperCase()}</div>${cards}`;
+  }).join('');
+}
+
+function wlAbrirModal(key){
+  const c=wlCandidatos[key];
+  const cons=wlGetCons(c);
+  document.getElementById('wl-modal-nombre').textContent=c.nombre;
+  document.getElementById('wl-modal-meta').textContent=(c.grupo||'—')+' · '+(c.carrera||'—');
+  const dec=wlDecisiones[key]||cons.vMaj;
+  let html='';
+  c.evals.forEach(e=>{
+    const sc=e.score>=4?'var(--green)':e.score>=3?'var(--amber)':e.score?'var(--red)':'var(--text3)';
+    html+=`<div class="eval-block"><div class="eval-block-header"><span>${e.evaluador||'Evaluador'}</span><span style="color:${sc};font-family:'DM Mono',monospace">${e.score?e.score+'/5':'—'}</span></div>${e.veredicto?`<div class="eval-detail"><b>Veredicto:</b> ${{adv:'T1 — Avanzar',obs:'T2 — Por discutir',des:'T3 — Descartar'}[e.veredicto]}</div>`:''} ${e.fortalezas?`<div class="eval-detail"><b>Fortalezas:</b> ${e.fortalezas}</div>`:''} ${e.desarrollo?`<div class="eval-detail"><b>Desarrollo:</b> ${e.desarrollo}</div>`:''} ${e.memorable?`<div class="eval-detail"><b>Memorable:</b> ${e.memorable}</div>`:''}</div>`;
+  });
+  html+=`<div style="margin-bottom:12px"><div class="modal-label">Decisión del panel</div><div class="verdict-row"><button class="v-btn ${dec==='adv'?'sel-adv':''}" id="wl-dec-adv" onclick="wlSetDec('${key}','adv')">Avanzar</button><button class="v-btn ${dec==='obs'?'sel-obs':''}" id="wl-dec-obs" onclick="wlSetDec('${key}','obs')">Por discutir</button><button class="v-btn ${dec==='des'?'sel-des':''}" id="wl-dec-des" onclick="wlSetDec('${key}','des')">Descartar</button></div></div>
+  <div style="margin-bottom:12px"><div class="modal-label">Notas del panel</div><textarea id="wl-nota-field" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;min-height:60px" placeholder="Acuerdos, condiciones para avanzar…">${wlNotas[key]||''}</textarea></div>
+  <button class="action-btn" onclick="wlGuardarNota('${key}')">Guardar y cerrar</button>`;
+  document.getElementById('wl-modal-body').innerHTML=html;
+  document.getElementById('wl-modal').classList.add('open');
+}
+
+function wlSetDec(key,val){
+  wlDecisiones[key]=val;
+  ['adv','obs','des'].forEach(x=>{const el=document.getElementById('wl-dec-'+x);if(el)el.className='v-btn'+(x===val?' sel-'+val:'');});
+  wlRender();
+}
+
+function wlGuardarNota(key){
+  const el=document.getElementById('wl-nota-field');
+  if(el)wlNotas[key]=el.value;
+  document.getElementById('wl-modal').classList.remove('open');
+  showToast('Guardado');
+  wlRender();
+}
+
+function cerrarModalOverlay(e){
+  if(e.target===document.getElementById('wl-modal'))document.getElementById('wl-modal').classList.remove('open');
+}
+
+function wlExportar(){
+  const lista=Object.entries(wlCandidatos).map(([k,c])=>({key:k,...c,...wlGetCons(c)})).sort((a,b)=>(b.avg??0)-(a.avg??0));
+  const adv=lista.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='adv');
+  const obs=lista.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='obs');
+  const des=lista.filter(c=>(wlDecisiones[c.key]||c.vMaj)==='des');
+  let lines=['RESUMEN WORKING LUNCH — Scholars PDC 2026','='.repeat(45),''];
+  if(adv.length){lines.push('T1 — AVANZAN ('+adv.length+')');adv.forEach(c=>lines.push(`  • ${c.nombre} | ${c.grupo} | ${c.avg?c.avg.toFixed(2)+'/5':'—'}${wlNotas[c.key]?' | '+wlNotas[c.key]:''}`));lines.push('');}
+  if(obs.length){lines.push('T2 — POR DISCUTIR ('+obs.length+')');obs.forEach(c=>lines.push(`  • ${c.nombre} | ${c.grupo} | ${c.avg?c.avg.toFixed(2)+'/5':'—'}${c.conflicto&&!wlDecisiones[c.key]?' [conflicto]':''}${wlNotas[c.key]?' | '+wlNotas[c.key]:''}`));lines.push('');}
+  if(des.length){lines.push('T3 — DESCARTAN ('+des.length+')');des.forEach(c=>lines.push(`  • ${c.nombre} | ${c.grupo} | ${c.avg?c.avg.toFixed(2)+'/5':'—'}`));lines.push('');}
+  const txt=lines.join('\n');
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>showToast('Resumen copiado')).catch(()=>fallbackCopy(txt));}
+  else fallbackCopy(txt);
+}
+</script>
+</body>
+</html>
